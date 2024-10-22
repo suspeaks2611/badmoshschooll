@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Voting</title>
+    <style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    text-align: center;
+    margin: 0;
+    padding: 50px;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.schools {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.school {
+    margin: 20px;
+    width: 200px; /* Set a fixed width for uniformity */
+}
+
+.school img {
+    width: 100%; /* Make the image responsive */
+    height: 120px; /* Fixed height for uniformity */
+    border-radius: 8px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#message {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sabse Badmosh School! :O</h1>
+        <div class="schools">
+            <div class="school">
+                <img src="devasya.jpg" alt="School A">
+                <button onclick="vote('school1')">Vote for Devasya</button>
+                <p id="school1-votes">Votes: 0</p>
+                <p id="school1-percentage">Percentage: 0%</p>
+            </div>
+            <div class="school">
+                <img src="stmary.jpg" alt="School B">
+                <button onclick="vote('school2')">Vote for St-Mary</button>
+                <p id="school2-votes">Votes: 0</p>
+                <p id="school2-percentage">Percentage: 0%</p>
+            </div>
+            <div class="school">
+                <img src="divinelife.jpg" alt="School C">
+                <button onclick="vote('school3')">Vote for Divine-Life</button>
+                <p id="school3-votes">Votes: 0</p>
+                <p id="school3-percentage">Percentage: 0%</p>
+            </div>
+            <div class="school">
+                <img src="gayatri.jpg" alt="School D">
+                <button onclick="vote('school4')">Vote for Gayatri</button>
+                <p id="school4-votes">Votes: 0</p>
+                <p id="school4-percentage">Percentage: 0%</p>
+            </div>
+            <div class="school">
+                <img src="southinternational.jpg" alt="School E">
+                <button onclick="vote('school5')">Vote for South-International</button>
+                <p id="school5-votes">Votes: 0</p>
+                <p id="school5-percentage">Percentage: 0%</p>
+            </div>
+        </div>
+        <div id="message"></div>
+    </div>
+    <script>
+        const votes = {
+    school1: 0,
+    school2: 0,
+    school3: 0,
+    school4: 0,
+    school5: 0,
+};
+
+let totalVotes = 0;
+let hasVoted = localStorage.getItem('hasVoted') === 'true';
+const userVote = localStorage.getItem('userVote');
+
+// Initialize votes from local storage
+if (userVote) {
+    votes[userVote]++;
+    totalVotes++;
+    hasVoted = true;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    updateResults();
+    if (hasVoted) {
+        disableButtons();
+        updateMessage();
+    }
+});
+
+function vote(school) {
+    if (hasVoted) {
+        alert("You have already voted! You cannot vote again.");
+        return;
+    }
+
+    votes[school]++;
+    totalVotes++;
+    hasVoted = true;
+
+    localStorage.setItem('hasVoted', 'true');
+    localStorage.setItem('userVote', school);
+
+    updateResults();
+    disableButtons();
+    updateMessage();
+}
+
+function updateResults() {
+    for (const school in votes) {
+        const voteCount = votes[school];
+        const percentage = totalVotes > 0 ? (voteCount / totalVotes * 100).toFixed(2) : 0;
+        document.getElementById(`${school}-votes`).innerText = `Votes: ${voteCount}`;
+        document.getElementById(`${school}-percentage`).innerText = `Percentage: ${percentage}%`;
+    }
+}
+
+function disableButtons() {
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => button.disabled = true);
+}
+
+function updateMessage() {
+    document.getElementById('message').innerText = "Thank you for voting!";
+}
+
+    </script>
+</body>
+</html>
